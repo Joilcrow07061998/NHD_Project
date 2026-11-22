@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои выезды</title>
+</head>
+<body>
+    <h1>Мои выезды</h1>
+    <ul>
+        {% for item in my_schedules %}
+            <li>
+                <strong>{{ item.object_name }}</strong> — {{ item.departure_date }}
+                ({{ item.get_status_display }})
+
+                {% if item.transport_name %}
+                    <br>Авто: {{ item.transport_name.name_auto }} ({{ item.transport_name.reg_number }})
+                {% else %}
+                    <br>Авто: не назначено
+                {% endif %}
+
+                <br>Бригада:
+                <ul>
+                    {% for member in item.team.all %}
+                        <li>
+                            {{ member.user.get_full_name|default:member.user.username }}
+                            {% if member.phone_number %} — {{ member.phone_number }}{% endif %}
+                        </li>
+                    {% empty %}
+                        <li>Бригада не назначена</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% empty %}
+            <li>Выездов пока нет.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
